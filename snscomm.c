@@ -38,7 +38,7 @@ typedef struct __st_data{
 } st_data;
 
  enum {
-     RUN_CONSOLE,
+    RUN_CONSOLE,
     RUN_DAEMON
  };
 
@@ -117,7 +117,7 @@ static void print_usage(void)
     printf("   snscomm /dev/ttyUSBx\n");
     printf("   snscomm /dev/ttyUSBx cmd arg0 arg1 arg2\n");
     printf("   where cmd may be:\n");
-    printf("      a - for reading current data\n");	   
+    printf("      a - for reading current data\n");    
     printf("      b - for setting specific paramters\n");
     printf("   if cmd is b then there are three arguments specified:\n");
     printf("      arg0 - integer, representing the channel ID\n");
@@ -140,14 +140,14 @@ int main(int argc, char *argv[])
     unsigned int v;
     
     if (argc > 1) {
-	ttyname = argv[1];
+    ttyname = argv[1];
     }
     else {
-	print_usage();
-	exit(0);
+    print_usage();
+    exit(0);
     }
     if (!init_serial(ttyname)) {
-	printf ("init err\n");
+        printf ("init err\n");
         exit(EXIT_FAILURE);
     }
 
@@ -156,27 +156,26 @@ int main(int argc, char *argv[])
     bcmd[0] = 'a';
 
     if (argc > 4) {
-	bcmd[0] = 'b';
-	bcmd[1] = (char)(atoi(argv[2]));
-	bcmd[2] = (char)(atoi(argv[3]));
- 
-        v = atoi(argv[4]);
-	bcmd[3] = (char)(v >> 8);
-	bcmd[4] = (char)(v & 0xff);
-	cnt = 5;
+        bcmd[0] = 'b';
+        bcmd[1] = (char)(atoi(argv[2]));
+        bcmd[2] = (char)(atoi(argv[3]));
+     
+            v = atoi(argv[4]);
+        bcmd[3] = (char)(v >> 8);
+        bcmd[4] = (char)(v & 0xff);
+        cnt = 5;
 
-	printf("%s %s %s\n", argv[2], argv[3], argv[4]);
+        printf("%s %s %s\n", argv[2], argv[3], argv[4]);
     }
 
     if (write(tty_fd, bcmd, cnt) != cnt) {
-	printf("Err write\n");
-	close(tty_fd);
+    printf("Err write\n");
+    close(tty_fd);
         return 0;
     }
     
-    while (read_string(res, sizeof(res) / sizeof(res[0]), 100) != 0)
-    {
-	printf("%s\n", res);
+    while (read_string(res, sizeof(res) / sizeof(res[0]), 100) != 0) {
+        printf("%s\n", res);
     }
 
     close(tty_fd);
